@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   libretv:
     image: bestzwei/libretv:latest
@@ -7,4 +7,10 @@ services:
       - "8899:80"
     environment:
       - PASSWORD=111111
+      - NODE_ENV=production
+      - PORT=3000
+      # - PASSWORD=your_secret_password # 取消注释并设置密码以启用密码保护
+      # - LIBRETV_PROXY_MODE=remote # 可选: 'local' (默认) 或 'remote'
+      # - LIBRETV_REMOTE_PROXY_URL=http://your-proxy-service:port # 如果 PROXY_MODE=remote, 设置此项
+      - LIBRETV_HIDE_BUILTIN_ADULT_APIS=true # 新增：设置为 'false' 以显示内置成人API，默认为 'true' (隐藏)
     restart: unless-stopped

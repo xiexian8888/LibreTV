@@ -198,6 +198,15 @@ const CUSTOM_API_CONFIG = {
 };
 
 // 新增隐藏内置黄色采集站API的变量，默认为true
-const HIDE_BUILTIN_ADULT_APIS = (typeof window !== 'undefined' && window.__ENV__ && window.__ENV__.HIDE_BUILTIN_ADULT_APIS !== undefined)
-    ? (window.__ENV__.HIDE_BUILTIN_ADULT_APIS === 'true')
-    : true;
+// 优先读取环境变量 LIBRETV_HIDE_BUILTIN_ADULT_APIS
+// 环境变量值为 "false" (不区分大小写) 时，设为 false，否则为 true
+const HIDE_BUILTIN_ADULT_APIS = (() => {
+    // 检查是否在 Node.js 环境中运行以访问 process.env
+    if (typeof process !== 'undefined' && process.env && process.env.LIBRETV_HIDE_BUILTIN_ADULT_APIS) {
+        return process.env.LIBRETV_HIDE_BUILTIN_ADULT_APIS.toLowerCase() !== 'false';
+    }
+    // 浏览器环境或未设置环境变量时，使用默认值 true
+    // 注意：在纯前端部署时，无法直接读取服务器环境变量，此设置将始终为 true
+    // 如果需要在纯前端部署中配置，需要通过其他方式（如构建时注入）
+    return true;
+})();
